@@ -1,8 +1,16 @@
 import { Module } from '@nestjs/common';
-import { HelloWorldModule } from './modules/hello-world/hello-world.module';
+import { ConfigModule } from '@nestjs/config';
+import configuration from './config/configuration';
+import { validationSchema } from './config/joi.validation';
 
 @Module({
-  imports: [HelloWorldModule],
+  imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+      load: [configuration],
+      validationSchema,
+    }),
+  ],
   controllers: [],
   providers: [],
 })
