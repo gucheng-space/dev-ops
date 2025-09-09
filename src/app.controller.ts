@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Post } from '@nestjs/common';
 import {
   HealthCheck,
   HealthCheckService,
@@ -21,10 +21,5 @@ export class AppController {
     return this.health.check([
       () => this.prismaHealth.pingCheck('prisma', this.prisma),
     ]);
-  }
-
-  @Get('bizerror')
-  bizerror() {
-    throw new BizException('业务错误');
   }
 }
