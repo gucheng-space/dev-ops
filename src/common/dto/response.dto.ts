@@ -7,7 +7,7 @@ export class R<T> {
   static ok<T>(data: T, msg = 'success'): R<T> {
     return new R(0, msg, data);
   }
-  static fail(code: number, msg: string): R<null> {
+  static fail(msg: string, code = 1): R<null> {
     return new R(code, msg, null);
   }
 }
