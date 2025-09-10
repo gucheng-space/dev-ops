@@ -3,13 +3,14 @@ import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
 import { AppValidationPipe } from './common/pipes/validation.pipe';
-import winstonLogger from './shared/winston/winston.logger';
 import helmet from 'helmet';
 import { TransformInterceptor } from './common/interceptor/transform.interceptor';
 import { HttpExceptionsFilter } from './common/filters/http-exceptions.filter';
+import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, { logger: winstonLogger() });
+  const app = await NestFactory.create(AppModule);
+  app.useLogger(app.get(WINSTON_MODULE_NEST_PROVIDER));
   const post = process.env.POST || 3000;
   app.setGlobalPrefix('api');
   // 校验
