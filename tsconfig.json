@@ -23,7 +23,9 @@
     "noFallthroughCasesInSwitch": false,
     "paths": {
       "@/*": ["src/*"],
-      "~/*": ["./*"]
+      "~/*": ["./*"],
+      "@/types": ["src/typings/export.d.ts"]
     }
-  }
+  },
+  "include": ["src/**/*.ts", "src/**/*.d.ts"]
 }
