@@ -6,7 +6,7 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { Response } from 'express';
-import { R } from '../dto/response.dto';
+import { responseMessage } from '../infra/utils/response';
 
 @Catch()
 export class AllExceptionsFilter implements ExceptionFilter {
@@ -14,14 +14,13 @@ export class AllExceptionsFilter implements ExceptionFilter {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
 
-    const [code, message] =
+    const statusCode =
       exception instanceof HttpException
-        ? [
-            exception.getStatus(),
-            (exception.getResponse() as any)?.message ?? exception.message,
-          ]
-        : [500, 'Internal error'];
+        ? exception.getStatus()
+        : HttpStatus.INTERNAL_SERVER_ERROR;
 
-    response.status(200).json(R.fail(code, message));
+    response
+      .status(statusCode)
+      .json(responseMessage(null, '服务器内部错误', statusCode));
   }
 }
