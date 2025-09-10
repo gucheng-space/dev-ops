@@ -6,17 +6,18 @@ import {
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { R } from '../dto/response.dto';
-import { Response } from 'express';
+import { responseMessage } from '../infra/utils';
+import { RESPONSE_MSG } from '../infra/enums';
+import { Response } from '@/types';
 
 @Injectable()
-export class TransformInterceptor<T> implements NestInterceptor<T, R<T>> {
-  intercept(ctx: ExecutionContext, next: CallHandler): Observable<R<T>> {
-    const res: Response = ctx.switchToHttp().getResponse();
+export class TransformInterceptor<T>
+  implements NestInterceptor<T, Response<T>>
+{
+  intercept(_: ExecutionContext, next: CallHandler): Observable<Response<T>> {
     return next.handle().pipe(
       map((data) => {
-        res.status(res.statusCode);
-        return R.ok(data);
+        return responseMessage(data, RESPONSE_MSG.SUCCESS, 0);
       }),
     );
   }

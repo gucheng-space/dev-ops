@@ -6,6 +6,7 @@ import { AppValidationPipe } from './common/pipes/validation.pipe';
 import winstonLogger from './shared/winston/winston.logger';
 import helmet from 'helmet';
 import { TransformInterceptor } from './common/interceptor/transform.interceptor';
+import { HttpExceptionsFilter } from './common/filters/http-exceptions.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { logger: winstonLogger() });
@@ -15,6 +16,7 @@ async function bootstrap() {
   app.useGlobalPipes(AppValidationPipe());
   // 异常过滤器
   app.useGlobalFilters(new AllExceptionsFilter());
+  app.useGlobalFilters(new HttpExceptionsFilter());
   // 响应拦截器
   app.useGlobalInterceptors(new TransformInterceptor());
   // 安全 & 跨域
